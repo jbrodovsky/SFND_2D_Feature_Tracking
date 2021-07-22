@@ -53,21 +53,12 @@ Here is how I completed the project and satisfied the rubric points listed below
 
 TASK: Implement a vector for dataBuffer objects whose size does not exceed a limit (e.g. 2 elements). This can be achieved by pushing in new elements on one end and removing elements on the other end. 
 
-I modified the dataBuffer variable to be a `deque` and not a `vector`.
+I  added an `if` statement to check if the vector is over the size specified by `dataBufferSize` and removed the first item if true.
 
 ```
-deque<DataFrame> dataBuffer; // list of data frames which are held in memory at the same time
-```
-
-I then added an `if` statement to check if the deque is over the size specified by `dataBufferSize` and used the deque functionality to remove items from the begining of the list.
-
-```
-DataFrame frame;
-frame.cameraImg = imgGray;
-dataBuffer.push_back(frame);
-if(dataBuffer.size() >dataBufferSize)
+if(dataBuffer.size() > dataBufferSize)
 {
-    dataBuffer.pop_front();
+    dataBuffer.erase(dataBuffer.begin());
 }
 ```
 ### MP.2 Keypoint Detection

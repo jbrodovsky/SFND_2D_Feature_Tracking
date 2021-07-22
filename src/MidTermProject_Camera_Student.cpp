@@ -16,8 +16,6 @@
 #include "dataStructures.h"
 #include "matching2D.hpp"
 
-#include <deque>
-
 using namespace std;
 
 /* MAIN PROGRAM */
@@ -39,7 +37,7 @@ int main(int argc, const char *argv[])
 
     // misc
     int dataBufferSize = 2;       // no. of images which are held in memory (ring buffer) at the same time
-    deque<DataFrame> dataBuffer; // list of data frames which are held in memory at the same time
+    vector<DataFrame> dataBuffer; // list of data frames which are held in memory at the same time
     bool bVis = false;            // visualize results
 
     /* MAIN LOOP OVER ALL IMAGES */
@@ -65,9 +63,9 @@ int main(int argc, const char *argv[])
         DataFrame frame;
         frame.cameraImg = imgGray;
         dataBuffer.push_back(frame);
-        if(dataBuffer.size() >dataBufferSize)
+        if(dataBuffer.size() > dataBufferSize)
         {
-            dataBuffer.pop_front();
+            dataBuffer.erase(dataBuffer.begin());
         }
 
         //// EOF STUDENT ASSIGNMENT
@@ -96,7 +94,7 @@ int main(int argc, const char *argv[])
         if (detectorType.compare("SHITOMASI") == 0) { detKeypointsShiTomasi(keypoints, imgGray, false); }
         else if (detectorType.compare("HARRIS") == 0) { detKeypointsHarris(keypoints, imgGray, false); }
         else { detKeypointsModern(keypoints, imgGray, detectorType, false); }
-        
+
         //// EOF STUDENT ASSIGNMENT
 
         //// STUDENT ASSIGNMENT
