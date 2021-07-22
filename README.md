@@ -70,9 +70,11 @@ if(dataBuffer.size() >dataBufferSize)
     dataBuffer.pop_front();
 }
 ```
-### MP.2 MP.2 Keypoint Detection
+### MP.2 Keypoint Detection
 
 TASK: Implement detectors HARRIS, FAST, BRISK, ORB, AKAZE, and SIFT and make them selectable by setting a string accordingly.
+
+I implemented the Harris detector using the function `detKeypointsHarris()` in `matching2D_Student.cpp`. The remaining methods were implemented using built in OpenCV methods. The method `detKeypointsModern()` identifies the detector type and calls the corresponding OpenCV function. I also implemented the visualization in a seperate function `visualizer()` that handles the keypoint visualization for all the detection methods. 
 
 ### MP.3 Keypoint Removal
 	
