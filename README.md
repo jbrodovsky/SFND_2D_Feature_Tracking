@@ -61,6 +61,7 @@ if(dataBuffer.size() > dataBufferSize)
     dataBuffer.erase(dataBuffer.begin());
 }
 ```
+
 ### MP.2 Keypoint Detection
 
 TASK: Implement detectors HARRIS, FAST, BRISK, ORB, AKAZE, and SIFT and make them selectable by setting a string accordingly.
@@ -71,17 +72,76 @@ I implemented the Harris detector using the function `detKeypointsHarris()` in `
 	
 TASK: Remove all keypoints outside of a pre-defined rectangle and only use the keypoints within the rectangle for further processing. 
 
+I achieved this by doing the following:
+
+```
+bool bFocusOnVehicle = true;
+cv::Rect vehicleRect(535, 180, 180, 150);
+if (bFocusOnVehicle)
+{
+    vector<cv::KeyPoint> filtered_keypoints;
+    for(cv::KeyPoint kp : keypoints)
+    {
+        if (vehicleRect.contains(kp.pt)) { filtered_keypoints.push_back(kp); }
+    }
+    keypoints = filtered_keypoints;
+}
+```
+
 ### MP.4 Keypoint Descriptors
 	
 TASK: Implement descriptors BRIEF, ORB, FREAK, AKAZE and SIFT and make them selectable by setting a string accordingly.
+
+I implemented this by using a conditional structure to match the ORB, AKAZE, and SIFT `detectorType` and `descriptorType`. This ensured that those methods worked properly. The `else` case can then be used to toggle between different keypoint descriptor methods.
+
+```
+if (detectorType.compare("ORB") == 0) { descriptorType = "ORB"; }
+else if (detectorType.compare("AKAZE") == 0) { descriptorType = "AKAZE"; }
+else if (detectorType.compare("SIFT") == 0) { descriptorType = "SIFT"; }
+else 
+{ 
+    descriptorType = "BRIEF";  // Specify desired descriptor type here.
+}
+descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, descriptorType);
+```
 
 ### MP.5 Descriptor Matching
 	
 TASK: Implement FLANN matching as well as k-nearest neighbor selection. Both methods must be selectable using the respective strings in the main function.
 
+I started off by modifying `main()` to check to see if SIFT was being used as it requires a specific configuration. Again, the `else` block is used for customization.
+
+```
+if (descriptorType.compare("SIFT") == 0 )
+{
+    // SIFT must use these methods
+    matcherType = "MAT_FLANN";
+    descriptorType2 = "DES_HOG";
+    selectorType = "SEL_KNN";
+}
+else
+{
+    // Choose prefered methods here.
+    matcherType = "MAT_BF";
+    descriptorType2 = "DES_BINARY";
+    selectorType = "SEL_NN";
+}
+```
+I then added my implementations for MAT_FLANN and SEL_KNN in the `matchDescriptors` method.
+
+
 ### MP.6 Descriptor Distance Ratio
 
 TASK: Use the K-Nearest-Neighbor matching to implement the descriptor distance ratio test, which looks at the ratio of best vs. second-best match to decide whether to keep an associated pair of keypoints.
+
+Building off of the previous task I added a loop that examines the matches' distance attribute. If it is less than 4/5ths the second best match, it keeps the first match.
+
+```
+for(int i=0; i<kPtsSource.size(); i++)
+{
+    if(knn_matches[i][0].distance < 0.8 * knn_matches[i][1].distance) { matches.push_back(knn_matches[i][0]); }
+}
+```
 
 ### MP.7 Performance Evaluation 1
 	

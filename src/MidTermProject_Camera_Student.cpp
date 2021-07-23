@@ -67,7 +67,6 @@ int main(int argc, const char *argv[])
         {
             dataBuffer.erase(dataBuffer.begin());
         }
-
         //// EOF STUDENT ASSIGNMENT
         cout << "#1 : LOAD IMAGE INTO BUFFER done" << endl;
 
@@ -75,7 +74,7 @@ int main(int argc, const char *argv[])
 
         // extract 2D keypoints from current image
         vector<cv::KeyPoint> keypoints; // create empty feature list for current image
-        string detectorType = "SHITOMASI";
+        string detectorType = "SIFT";
 
         //// STUDENT ASSIGNMENT
         //// TASK MP.2 -> add the following keypoint detectors in file matching2D.cpp and enable string-based selection based on detectorType
@@ -105,9 +104,13 @@ int main(int argc, const char *argv[])
         cv::Rect vehicleRect(535, 180, 180, 150);
         if (bFocusOnVehicle)
         {
-            // ...
+            vector<cv::KeyPoint> filtered_keypoints;
+            for(cv::KeyPoint kp : keypoints)
+            {
+                if (vehicleRect.contains(kp.pt)) { filtered_keypoints.push_back(kp); }
+            }
+            keypoints = filtered_keypoints;
         }
-
         //// EOF STUDENT ASSIGNMENT
 
         // optional : limit number of keypoints (helpful for debugging and learning)
@@ -135,7 +138,16 @@ int main(int argc, const char *argv[])
         //// -> BRIEF, ORB, FREAK, AKAZE, SIFT
 
         cv::Mat descriptors;
-        string descriptorType = "BRISK"; // BRIEF, ORB, FREAK, AKAZE, SIFT
+        string descriptorType; // BRIEF, ORB, FREAK, AKAZE, SIFT
+
+        // FAST, BRISK, ORB, AKAZE, SIFT
+        if (detectorType.compare("ORB") == 0) { descriptorType = "ORB"; }
+        else if (detectorType.compare("AKAZE") == 0) { descriptorType = "AKAZE"; }
+        else if (detectorType.compare("SIFT") == 0) { descriptorType = "SIFT"; }
+        else 
+        { 
+            descriptorType = "BRIEF";  // Specify desired descriptor type here.
+        }
         descKeypoints((dataBuffer.end() - 1)->keypoints, (dataBuffer.end() - 1)->cameraImg, descriptors, descriptorType);
         //// EOF STUDENT ASSIGNMENT
 
@@ -150,18 +162,34 @@ int main(int argc, const char *argv[])
             /* MATCH KEYPOINT DESCRIPTORS */
 
             vector<cv::DMatch> matches;
-            string matcherType = "MAT_BF";        // MAT_BF, MAT_FLANN
-            string descriptorType = "DES_BINARY"; // DES_BINARY, DES_HOG
-            string selectorType = "SEL_NN";       // SEL_NN, SEL_KNN
+            string matcherType;        // MAT_BF, MAT_FLANN
+            string descriptorType2;    // DES_BINARY, DES_HOG
+            string selectorType;       // SEL_NN, SEL_KNN
+
+            if (descriptorType.compare("SIFT") == 0 )
+            {
+                // SIFT must use these methods
+                matcherType = "MAT_FLANN";
+                descriptorType2 = "DES_HOG";
+                selectorType = "SEL_KNN";
+            }
+            else
+            {
+                // Choose prefered methods here.
+                matcherType = "MAT_BF";
+                descriptorType2 = "DES_BINARY";
+                selectorType = "SEL_NN";
+            }
 
             //// STUDENT ASSIGNMENT
             //// TASK MP.5 -> add FLANN matching in file matching2D.cpp
             //// TASK MP.6 -> add KNN match selection and perform descriptor distance ratio filtering with t=0.8 in file matching2D.cpp
-
+            
             matchDescriptors((dataBuffer.end() - 2)->keypoints, (dataBuffer.end() - 1)->keypoints,
                              (dataBuffer.end() - 2)->descriptors, (dataBuffer.end() - 1)->descriptors,
-                             matches, descriptorType, matcherType, selectorType);
+                             matches, descriptorType2, matcherType, selectorType);
 
+            //std::cout<<"Marker!\n";
             //// EOF STUDENT ASSIGNMENT
 
             // store matches in current data frame
