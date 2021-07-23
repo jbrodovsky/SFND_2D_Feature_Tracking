@@ -152,7 +152,7 @@ TASK 8: Count the number of matched keypoints for all 10 images using all possib
 TASK 9: Log the time it takes for keypoint detection and descriptor extraction. The results must be entered into a spreadsheet and based on this data, the TOP3 detector / descriptor combinations must be recommended as the best choice for our purpose of detecting keypoints on vehicles.
 
 | Detector Type | Descriptor type | Image 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | Average |
-| - | - | - | - | - | - | - | - | - | - | - | - | - |
+| ------------- | --------------- | ------- | - | - | - | - | - | - | - | - | ------- |
 |SHITOMASI| BRIEF| 125| 118| 123| 120| 120| 113| 114| 123| 111| 118.556
 | | Times | 0.0123725| 0.0113318| 0.0107004| 0.0132807| 0.010495| 0.0110437| 0.0125044| 0.0112243| 0.0100679| 0.0114467|
 |SHITOMASI| ORB| 125| 118| 123| 120| 120| 113| 114| 123| 111| 118.556
