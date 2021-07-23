@@ -199,3 +199,11 @@ TASK 9: Log the time it takes for keypoint detection and descriptor extraction. 
 | | Times | 0.0277104| 0.0273354| 0.0286746| 0.025961| 0.0272706| 0.0267545| 0.0292484| 0.0302119| 0.0278891| 0.0278951| 
 |SIFT| SIFT| 82| 81| 85| 95| 90| 82| 83| 103| 105| 89.5556
 |    Times | | 0.103697| 0.101107| 0.111727| 0.11332| 0.119584| 0.10741| 0.109044| 0.113733| 0.108854| 0.109831| 
+
+From this data, I found that the top three methods (the fastest) were:
+
+| Detector | Descriptor | Ave Keypoints | Time (ms) |
+| -------- | ---------- | ------------- | --------- |
+| FAST | BRIEF | 410.333 | 0.004184 |
+| FAST | ORB | 410.333 | 0.005816 |
+| ORB | BRIEF | 114.778 | 0.007249 |
