@@ -157,7 +157,7 @@ TASK 9: Log the time it takes for keypoint detection and descriptor extraction. 
 
 #### Shitomasi
 
-| Detector Type | Descriptor type | Image 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Average | Time |
+| Detector Type | Descriptor type | Image 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | Average |
 | - | - | - | - | - | - | - | - | - | - | - | - | - |
 |SHITOMASI| BRIEF| 125| 118| 123| 120| 120| 113| 114| 123| 111| 118.556
 | | | 0.0123725| 0.0113318| 0.0107004| 0.0132807| 0.010495| 0.0110437| 0.0125044| 0.0112243| 0.0100679| 0.0114467|
